@@ -1,0 +1,137 @@
+diff --git a/third_party/android/android_configure.bzl b/third_party/android/android_configure.bzl
+index c656647dbe6..2bd42460155 100644
+--- a/third_party/android/android_configure.bzl
++++ b/third_party/android/android_configure.bzl
+@@ -90,10 +90,6 @@ def _android_autoconf_impl(repository_ctx):
+     if ndk_rule == "" and sdk_rule == "":
+         sdk_rule = "pass"
+ 
+-    repository_ctx.template(
+-        "BUILD",
+-        Label("//third_party/android:android_configure.BUILD.tpl"),
+-    )
+     repository_ctx.template(
+         "android.bzl",
+         Label("//third_party/android:android.bzl.tpl"),
+@@ -103,6 +99,10 @@ def _android_autoconf_impl(repository_ctx):
+             "MAYBE_ANDROID_NDK_REPOSITORY": ndk_rule,
+         },
+     )
++    repository_ctx.template(
++        "BUILD",
++        Label("//third_party/android:android_configure.BUILD.tpl"),
++    )
+ 
+ android_configure = repository_rule(
+     implementation = _android_autoconf_impl,
+diff --git a/third_party/systemlibs/syslibs_configure.bzl b/third_party/systemlibs/syslibs_configure.bzl
+index 3c734e475f4..d14ee526263 100644
+--- a/third_party/systemlibs/syslibs_configure.bzl
++++ b/third_party/systemlibs/syslibs_configure.bzl
+@@ -117,7 +117,6 @@ def _tpl(repository_ctx, tpl, substitutions = {}, out = None):
+ def _create_dummy_repository(repository_ctx):
+     """Creates the dummy repository to build with all bundled libraries."""
+ 
+-    _tpl(repository_ctx, ":BUILD")
+     _tpl(
+         repository_ctx,
+         ":build_defs.bzl",
+@@ -126,11 +125,11 @@ def _create_dummy_repository(repository_ctx):
+             "%{syslibs_list}": "",
+         },
+     )
++    _tpl(repository_ctx, ":BUILD")
+ 
+ def _create_local_repository(repository_ctx):
+     """Creates the repository to build with system libraries."""
+ 
+-    _tpl(repository_ctx, ":BUILD")
+     _tpl(
+         repository_ctx,
+         ":build_defs.bzl",
+@@ -139,6 +138,7 @@ def _create_local_repository(repository_ctx):
+             "%{syslibs_list}": _format_system_lib_list(repository_ctx),
+         },
+     )
++    _tpl(repository_ctx, ":BUILD")
+ 
+ def _syslibs_autoconf_impl(repository_ctx):
+     """Implementation of the syslibs_configure repository rule."""
+diff --git a/third_party/xla/third_party/tensorrt/tensorrt_configure.bzl b/third_party/xla/third_party/tensorrt/tensorrt_configure.bzl
+index 8a4761348e3..f225fee6ece 100644
+--- a/third_party/xla/third_party/tensorrt/tensorrt_configure.bzl
++++ b/third_party/xla/third_party/tensorrt/tensorrt_configure.bzl
+@@ -127,12 +127,6 @@ def _tpl(repository_ctx, tpl, substitutions):
+ def _create_dummy_repository(repository_ctx):
+     """Create a dummy TensorRT repository."""
+     _tpl(repository_ctx, "build_defs.bzl", {"%{if_tensorrt}": "if_false"})
+-    _tpl(repository_ctx, "BUILD", {
+-        "%{copy_rules}": "",
+-        "\":tensorrt_include\"": "",
+-        "\":tensorrt_lib\"": "",
+-        "%{oss_rules}": _TENSORRT_OSS_DUMMY_BUILD_CONTENT,
+-    })
+     _tpl(repository_ctx, "tensorrt/include/tensorrt_config.h", {
+         "%{tensorrt_version}": "",
+     })
+@@ -151,6 +145,12 @@ def _create_dummy_repository(repository_ctx):
+         "tensorrt/tensorrt_config.py",
+         _py_tmpl_dict({}),
+     )
++    _tpl(repository_ctx, "BUILD", {
++        "%{copy_rules}": "",
++        "\":tensorrt_include\"": "",
++        "\":tensorrt_lib\"": "",
++        "%{oss_rules}": _TENSORRT_OSS_DUMMY_BUILD_CONTENT,
++    })
+ 
+ def enable_tensorrt(repository_ctx):
+     """Returns whether to build with TensorRT support."""
+@@ -235,15 +235,6 @@ def _create_local_tensorrt_repository(repository_ctx):
+         {"%{if_tensorrt}": "if_true"},
+     )
+ 
+-    # Set up BUILD file.
+-    repository_ctx.template(
+-        "BUILD",
+-        tpl_paths["BUILD"],
+-        {
+-            "%{copy_rules}": "\n".join(copy_rules),
+-        },
+-    )
+-
+     # Set up the plugins folder BUILD file.
+     repository_ctx.template(
+         "plugin/BUILD",
+@@ -277,6 +268,15 @@ def _create_local_tensorrt_repository(repository_ctx):
+             "tensorrt_version": trt_version,
+         }),
+     )
++    # Set up BUILD file.
++    repository_ctx.template(
++        "BUILD",
++        tpl_paths["BUILD"],
++        {
++            "%{copy_rules}": "\n".join(copy_rules),
++        },
++    )
++
+ 
+ def _py_tmpl_dict(d):
+     return {"%{tensorrt_config}": str(d)}
+@@ -287,7 +287,6 @@ def _tensorrt_configure_impl(repository_ctx):
+     if get_host_environ(repository_ctx, _TF_TENSORRT_CONFIG_REPO) != None:
+         # Forward to the pre-configured remote repository.
+         remote_config_repo = repository_ctx.os.environ[_TF_TENSORRT_CONFIG_REPO]
+-        repository_ctx.template("BUILD", config_repo_label(remote_config_repo, ":BUILD"), {})
+         repository_ctx.template(
+             "build_defs.bzl",
+             config_repo_label(remote_config_repo, ":build_defs.bzl"),
+@@ -308,6 +307,7 @@ def _tensorrt_configure_impl(repository_ctx):
+             config_repo_label(remote_config_repo, ":LICENSE"),
+             {},
+         )
++        repository_ctx.template("BUILD", config_repo_label(remote_config_repo, ":BUILD"), {})
+         return
+ 
+     if not enable_tensorrt(repository_ctx):
