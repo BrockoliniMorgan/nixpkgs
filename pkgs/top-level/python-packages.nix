@@ -19680,6 +19680,8 @@ self: super: with self; {
 
   trakit = callPackage ../development/python-modules/trakit { };
 
+  trame = callPackage ../development/python-modules/trame { };
+
   trame-client = callPackage ../development/python-modules/trame-client { };
 
   trame-common = callPackage ../development/python-modules/trame-common { };
