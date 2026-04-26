@@ -19684,6 +19684,8 @@ self: super: with self; {
 
   trame-common = callPackage ../development/python-modules/trame-common { };
 
+  trame-server = callPackage ../development/python-modules/trame-server { };
+
   trampoline = callPackage ../development/python-modules/trampoline { };
 
   transaction = callPackage ../development/python-modules/transaction { };
