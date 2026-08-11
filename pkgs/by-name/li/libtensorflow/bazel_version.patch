@@ -1,0 +1,10 @@
+diff --git a/.bazelversion b/.bazelversion
+index 26c75fe8ad4..869aa152323 100644
+--- a/.bazelversion
++++ b/.bazelversion
+@@ -1,2 +1,2 @@
+-7.7.0
+-# NOTE: Update Bazel version in tensorflow/tools/ci_build/release/common.sh.oss
+\ No newline at end of file
++7.6.0
++# NOTE: Update Bazel version in tensorflow/tools/ci_build/release/common.sh.oss

@@ -1,0 +1,12 @@
+diff --git a/third_party/xla/xla/tsl/tsl.bzl b/third_party/xla/xla/tsl/tsl.bzl
+index b27e65e2163..12c412256fe 100644
+--- a/third_party/xla/xla/tsl/tsl.bzl
++++ b/third_party/xla/xla/tsl/tsl.bzl
+@@ -665,7 +665,6 @@ def tsl_pybind_extension_opensource(
+             compatible_with = compatible_with,
+             deprecation = deprecation,
+             features = features + ["-use_header_modules"],
+-            licenses = licenses,
+             restricted_to = restricted_to,
+             shared_lib_name = so_file,
+             testonly = testonly,

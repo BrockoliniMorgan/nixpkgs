@@ -1,0 +1,14 @@
+diff --git a/tensorflow/tools/lib_package/BUILD b/tensorflow/tools/lib_package/BUILD
+index c648e9363bc..a067388da80 100644
+--- a/tensorflow/tools/lib_package/BUILD
++++ b/tensorflow/tools/lib_package/BUILD
+@@ -68,8 +68,7 @@ pkg_tar(
+ 
+ pkg_tar(
+     name = "clib",
+-    srcs = ["//tensorflow"],
+-    package_dir = "lib",
++    srcs = ["//tensorflow:tensorflow.lib"],
+     symlinks = if_macos(
+         {
+             "lib/libtensorflow.dylib": "libtensorflow.%s.dylib" % VERSION_MAJOR,
