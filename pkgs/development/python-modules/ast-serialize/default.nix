@@ -7,19 +7,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ast-serialize";
-  version = "0.6.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mypyc";
     repo = "ast_serialize";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7MNtry/GDUpjuh/rMB+R4wAQpPAG/yLNGqH4tEyK7tw=";
+    hash = "sha256-SqnnNSSYN5WvwpmK1LIjByVHwTMZWUUUbpB4WugiMno=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-iw1qkQoagmS+8e9znEEo4EZocu+ECL4c+egBY2TOrk0=";
+    hash = "sha256-MujdMrxSBPqFmrMbCr35CtVZcrq6+fR8ERhAFbXTYkI=";
   };
 
   build-system = [
