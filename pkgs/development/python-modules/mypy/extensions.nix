@@ -7,16 +7,16 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mypy-extensions";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy_extensions";
-    tag = version;
-    hash = "sha256-HNAFsWX4tU9hfZkKxLNJn1J+H3uTesQflbRPlo3GQ4k=";
+    tag = finalAttrs.version;
+    hash = "sha256-r7zhiHoRsTUjcQd8yeAYN0VKak9CzbR+esAN8sYB8Zc=";
   };
 
   dependencies = [ flit-core ];
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ BrockoliniMorgan ];
   };
-}
+})
